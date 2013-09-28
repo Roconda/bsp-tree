@@ -46,23 +46,28 @@ public class Spel {
     }
 
     public void qSort(int position) {
-        recQuickSort(0, objects.length-1, position);
+        SplitNode spNode = new SplitNode(null);
+
+        recQuickSort(0, objects.length-1, position,spNode);
     }
 
-    private void recQuickSort(int left, int right, int position) {
+    private void recQuickSort(int left, int right, int position, SplitNode spNode) {
         int size = right-left+1;
         int newPos = (position == 0) ? 1 : 0;
 
         if(size == 1) return;
         if(size < 3) {
             if(objects[left].getPosition(position) > objects[right].getPosition(position)) swap(left, right);
-            System.out.println("DONE");
+            spNode
+                    .setLeft(new EndNode(spNode, objects[left]))
+                    .setRight(new EndNode(spNode, objects[right]));
             return;
         }else{
             SpelObject median = getMediaan(left, right, position);
             int partition = partition(left, right, median.getPosition(position), position);
-            recQuickSort(left, partition, newPos);
-            recQuickSort(partition+1, right, newPos);
+
+            recQuickSort(left, partition, newPos, new SplitNode(spNode).setLeft(new EndNode(spNode, objects[left])));
+            recQuickSort(partition+1, right, newPos, new SplitNode(spNode).setRight(new EndNode(spNode, objects[right])));
         }
 
         printValues();
