@@ -27,7 +27,6 @@ public class Spel {
     }
 
     public SpelObject getMediaan(int left, int right, int position) {
-        int size = right-left+1;
 
         int center = (left+right)/2;
 
@@ -55,8 +54,10 @@ public class Spel {
         int size = right-left+1;
         int newPos = (position == 0) ? 1 : 0;
 
-        if(size == 1) return;
-        if(size < 3) {
+        if(size == 1) {
+            if(position == 0) spNode.setLeft(new EndNode(spNode, objects[position]));
+            else spNode.setRight(new EndNode(spNode, objects[position]));
+        }else if(size < 3) {
             if(objects[left].getPosition(position) > objects[right].getPosition(position)) swap(left, right);
             spNode
                     .setLeft(new EndNode(spNode, objects[left]))
